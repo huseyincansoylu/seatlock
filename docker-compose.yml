@@ -1,0 +1,36 @@
+name: seatlock
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: seatlock-postgres
+    environment:
+      POSTGRES_USER: seatlock
+      POSTGRES_PASSWORD: seatlock
+      POSTGRES_DB: seatlock
+    ports:
+      - "127.0.0.1:5435:5432" # sadece localhost; host'ta 5432-5434 dolu
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U seatlock -d seatlock"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:8-alpine
+    container_name: seatlock-redis
+    ports:
+      - "127.0.0.1:6379:6379" # sadece localhost
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  postgres-data:
+  redis-data:
