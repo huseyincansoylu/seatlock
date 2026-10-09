@@ -1,10 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
+import type { DependencyStatus, HealthResponse } from '@seatlock/shared';
 import { Redis } from 'ioredis';
 import { Pool } from 'pg';
 import { PG_POOL } from '../database/database.module.js';
 import { REDIS } from '../redis/redis.module.js';
-
-type DependencyStatus = 'up' | 'down';
 
 const CHECK_TIMEOUT_MS = 2_000;
 
@@ -15,7 +14,7 @@ export class HealthService {
     @Inject(REDIS) private readonly redis: Redis,
   ) {}
 
-  async check() {
+  async check(): Promise<HealthResponse> {
     const [database, redis] = await Promise.all([
       this.probe(() => this.pool.query('SELECT 1')),
       this.probe(() => this.redis.ping()),
