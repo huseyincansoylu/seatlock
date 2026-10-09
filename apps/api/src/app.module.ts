@@ -5,6 +5,7 @@ import { AppService } from './app.service.js';
 import { validateEnv } from './config/env.js';
 import { DatabaseModule } from './database/database.module.js';
 import { HealthModule } from './health/health.module.js';
+import { VenuesModule } from './venues/venues.module.js';
 import { RedisModule } from './redis/redis.module.js';
 
 @Module({
@@ -17,6 +18,7 @@ import { RedisModule } from './redis/redis.module.js';
     DatabaseModule,
     RedisModule,
     HealthModule,
+    VenuesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
